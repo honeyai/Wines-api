@@ -10,7 +10,8 @@ console.log(BASE_URL)
 const GetWinesHooks = () => {
 
   const [data, setData] = useState({});
-  
+  const [loading, setLoading] = useState(false);
+
   async function getWines() {
     try {
       let response = await axios.get(BASE_URL + `/wines`)
@@ -18,8 +19,9 @@ const GetWinesHooks = () => {
     } catch (error) {
       console.error("!!Señor!! PROBLEMA:", error.message)
     }
+    setLoading(true);
   }
-  
+
   console.log("we gots the data,", data)
   console.log("we gots the array,", data[0])
 
@@ -27,16 +29,32 @@ const GetWinesHooks = () => {
 
   console.log("this is store,", store)
 
+  console.log("this loading,", loading)
+
 
 
   useEffect(() => {
     getWines();
   }, [])
-  
+
 
   return (
     <div>
-      
+      {loading ?
+          data.map(index => {
+            return (
+              <div className="theWines" >
+                <h4>{index.name}</h4>
+                <h4>{index.year}</h4>
+                <img src={index.picture} />
+                <h4>Made with {index.grapes}</h4>
+                <h4>Made in {index.region}, {index.country}</h4>
+                <h4>{index.description}</h4>
+              </div>
+            )
+          })
+      : null}
+
     </div>
   );
 };
